@@ -1,0 +1,22 @@
+<columns>
+	<column>
+		<name> id </name>
+		<type> int </type>
+	</column>
+	<column>
+		<name> reporting_date </name>
+		<type> string </type>
+	</column>
+	<column>
+		<name> message </name>
+		<type> string </type>
+	</column>
+	<column>
+		<name> closed </name>
+		<type> string </type>
+	</column>
+	<column>
+		<name> opened </name>
+		<type> string </type>
+	</column>
+</columns>

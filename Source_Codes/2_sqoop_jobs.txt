@@ -1,0 +1,38 @@
+sqoop job --create sqoop_loan_info \
+-- \
+import --connect jdbc:mysql://localhost/bank \
+--username 'myuser' \
+--password-file '/user/acadgild/sqoop.password' \
+--table 'loan_info' \
+--target-dir '/user/acadgild/hive/bank/loan_info_stg' \
+--incremental append \
+--check-column loan_id \
+-m 1;
+
+sqoop job --exec sqoop_loan_info
+
+sqoop job --create sqoop_credit_card_info \
+-- \
+import --connect jdbc:mysql://localhost/bank \
+--username 'myuser' \
+--password-file '/user/acadgild/sqoop.password' \
+--table 'credit_card_info' \
+--target-dir '/user/acadgild/hive/bank/credit_card_info_stg' \
+--incremental append \
+--check-column cc_number \
+-m 1;
+
+sqoop job --exec sqoop_credit_card_info
+
+sqoop job --create sqoop_shares_info \
+-- \
+import --connect jdbc:mysql://localhost/bank \
+--username 'myuser' \
+--password-file '/user/acadgild/sqoop.password' \
+--table 'shares_info' \
+--target-dir '/user/acadgild/hive/bank/shares_info_stg' \
+--incremental append \
+--check-column gmt_timestamp \
+-m 1;
+
+sqoop job --exec sqoop_shares_info

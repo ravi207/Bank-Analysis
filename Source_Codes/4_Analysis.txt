@@ -1,0 +1,34 @@
+ADD JAR /home/acadgild/hive/hive-udf.jar;
+CREATE TEMPORARY FUNCTION encrypt AS 'encryption.AESencrypt';
+CREATE TEMPORARY FUNCTION decrypt AS 'encryption.AESdecrypt';
+CREATE TEMPORARY FUNCTION max_profit AS 'maxprofit.MaxProfit';
+
+SET hive.auto.convert.join=false;
+
+USE bank;
+
+SELECT decrypt(user_id)
+FROM loan_info
+WHERE datediff(from_unixtime(unix_timestamp(), 'yyyy-MM-dd'), decrypt(last_payment_date)) >= 60;
+
+SELECT decrypt(li.user_id)
+FROM loan_info li INNER JOIN credit_card_info cci
+ON decrypt(li.user_id) = decrypt(cci.user_id)
+WHERE CAST(decrypt(cci.outstanding_balance) AS double) = 0.0
+AND datediff(from_unixtime(unix_timestamp(), 'yyyy-MM-dd'), decrypt(li.last_payment_date)) >= 30;
+
+
+SELECT share_id, share_date, max_profit(collect_list(share_price))
+FROM
+(
+SELECT decrypt(Share_id) AS share_id,
+decrypt(Gmt_timestamp) AS Gmt_timestamp,
+from_unixtime(CAST(decrypt(Gmt_timestamp) AS int), 'yyyy-MM-dd') AS share_date,
+CAST (decrypt(Share_price) AS double) AS share_price
+FROM shares_info
+DISTRIBUTE BY share_id,
+from_unixtime(CAST(Gmt_timestamp AS int), 'yyyy-MM-dd')
+SORT BY share_id,
+CAST(Gmt_timestamp AS int)
+) inner
+GROUP BY share_id, share_date;

@@ -1,0 +1,6 @@
+101,2012-02-10,Hi All Welcome,NO,NO
+101,2012-02-10,Hi All Welcome,NO,NO
+102,2012-02-08,Hi All Welcome,YES,NO
+102,2012-02-11,Hi All Welcome,NO,YES
+103,2012-01-14,Hi All Welcome,YES,NO
+104,2012-05-09,Hi All Welcome,YES,NO

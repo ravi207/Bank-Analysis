@@ -1,0 +1,12 @@
+cd /home/acadgild/sqoop
+echo "/usr/local/sqoop/bin/sqoop job --exec sqoop_loan_info" > sqoop_loan_info.sh
+
+echo "/usr/local/sqoop/bin/sqoop job --exec sqoop_credit_card_info" > sqoop_credit_card_info.sh
+
+echo "/usr/local/sqoop/bin/sqoop job --exec sqoop_shares_info" > sqoop_shares_info.sh
+
+chmod 750 *.sh
+
+(crontab -l 2>/dev/null; echo "*/2 * * * * /home/acadgild/sqoop/sqoop_loan_info.sh") | crontab -
+(crontab -l 2>/dev/null; echo "*/2 * * * * /home/acadgild/sqoop/sqoop_credit_card_info.sh") | crontab -
+(crontab -l 2>/dev/null; echo "*/2 * * * * /home/acadgild/sqoop/sqoop_shares_info.sh") | crontab -

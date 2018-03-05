@@ -1,0 +1,5 @@
+cd /home/acadgild/bank/email_files
+cat *.txt > email_data
+rm *.txt
+
+hive -e "LOAD DATA LOCAL INPATH '/home/acadgild/bank/email_files/email_data' INTO TABLE bank.email_analysis"

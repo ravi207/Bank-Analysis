@@ -1,0 +1,19 @@
+import xml.etree.ElementTree as ET
+import commands
+base_str = file("email_schema.xml", "r").read().replace("\t","").replace(" ","")
+root = ET.fromstring(base_str)
+
+structure_list = []
+for each_col in root.findall("column"):
+	name = each_col.find("name").text
+	type = each_col.find("type").text
+	structure_list.append(name + " " + type)
+
+create_table_string = "CREATE TABLE email_analysis (" + ",".join(structure_list) + ") ROW FORMAT DELIMITED FIELDS TERMINATED BY ',';"
+
+hive_file = file("hive_query.hql", "w")
+hive_file.write("CREATE DATABASE IF NOT EXISTS bank;\n")
+hive_file.write("USE bank;\n")
+hive_file.write(create_table_string)
+hive_file.close()
+status, output = commands.getstatusoutput("hive -f " + hive_file.name)

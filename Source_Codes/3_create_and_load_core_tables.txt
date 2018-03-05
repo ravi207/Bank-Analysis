@@ -1,0 +1,60 @@
+ADD JAR /home/acadgild/hive/hive-udf.jar;
+CREATE TEMPORARY FUNCTION encrypt AS 'encryption.AESencrypt';
+CREATE TEMPORARY FUNCTION decrypt AS 'encryption.AESdecrypt';
+
+CREATE DATABASE bank;
+USE bank;
+
+CREATE TABLE loan_info (
+Loan_id string,
+User_id string,
+last_payment_date string,
+payment_installation string,
+Date_payable string
+) STORED AS ORC;
+
+INSERT INTO TABLE loan_info
+SELECT encrypt(Loan_id),
+encrypt(User_id),
+encrypt(last_payment_date),
+encrypt(payment_installation),
+encrypt(Date_payable)
+FROM loan_info_stg;
+
+TRUNCATE TABLE loan_info_stg;
+
+CREATE TABLE credit_card_info
+(
+cc_number string,
+user_id string,
+maximum_credit string,
+outstanding_balance string,
+due_date string
+) STORED AS ORC;
+
+INSERT INTO TABLE credit_card_info
+SELECT encrypt(cc_number),
+encrypt(User_id),
+encrypt(maximum_credit),
+encrypt(outstanding_balance),
+encrypt(due_date)
+FROM credit_card_info_stg;
+
+TRUNCATE TABLE credit_card_info_stg;
+
+CREATE TABLE shares_info
+(
+Share_id string,
+Company_name string,
+Gmt_timestamp string,
+Share_price string
+) STORED AS ORC;
+
+INSERT INTO TABLE shares_info
+SELECT encrypt(Share_id),
+encrypt(Company_name),
+encrypt(Gmt_timestamp),
+encrypt(Share_price)
+FROM shares_info_stg;
+
+TRUNCATE TABLE shares_info_stg;
